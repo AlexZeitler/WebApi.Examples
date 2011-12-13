@@ -97,6 +97,16 @@ namespace WebApi.RestFiles.Operations
 			return new HttpResponseMessage(HttpStatusCode.BadRequest); 
 		}
 
+		[WebInvoke(Method = "DELETE", UriTemplate = "{*Path}")]
+		public HttpResponseMessage Delete(string path)
+		{
+			var targetPath = Path.Combine(Config.RootDirectory, path.Replace("/", "\\"));
+
+			System.IO.File.Delete(targetPath);
+
+			return new HttpResponseMessage(HttpStatusCode.OK);
+		}
+
 		private FolderResult GetFolderResult(string targetPath) {
 			var result = new FolderResult();
 
