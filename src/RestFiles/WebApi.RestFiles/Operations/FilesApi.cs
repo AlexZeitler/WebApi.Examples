@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Json;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -103,6 +104,26 @@ namespace WebApi.RestFiles.Operations
 			var targetPath = Path.Combine(Config.RootDirectory, path.Replace("/", "\\"));
 
 			System.IO.File.Delete(targetPath);
+
+			return new HttpResponseMessage(HttpStatusCode.OK);
+		}
+
+		[WebInvoke(Method = "PUT", UriTemplate = "{*Path}")]
+		public HttpResponseMessage Put(string path, HttpRequestMessage request)
+		{
+			var targetPath = Path.Combine(Config.RootDirectory, path.Replace("/", "\\"));
+
+			dynamic formContent = request.Content.ReadAsAsync<JsonValue>().Result;
+			var textContents = (string)formContent.TextContents;
+
+			if (!this.Config.TextFileExtensions.Contains(Path.GetExtension(targetPath)))
+				throw new NotSupportedException("PUT Can only update text files, not: " + Path.GetExtension(targetPath));
+
+			if (textContents == null)
+				throw new ArgumentNullException("TextContents");
+
+			System.IO.File.WriteAllText(targetPath, textContents);
+
 
 			return new HttpResponseMessage(HttpStatusCode.OK);
 		}
