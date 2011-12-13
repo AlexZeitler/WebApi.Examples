@@ -1,7 +1,6 @@
 using System.Configuration;
 using System.IO;
 using System.Net.Http;
-using System.Reflection;
 using System.ServiceModel.Web;
 using WebApi.RestFiles.Types;
 using File = WebApi.RestFiles.Types.File;
@@ -10,12 +9,21 @@ namespace WebApi.RestFiles.Operations
 {
 	public class FilesApi
 	{
+		readonly AppConfig _config;
+
+		public FilesApi(AppConfig config) {
+			_config = config;
+		}
+
+		public AppConfig Config {
+			get { return _config; }
+		}
+
 		[WebGet(UriTemplate = "{*Path}")]
 		public HttpResponseMessage<FilesResponse> Get(string path)
 		{
-			var approot = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-			var root = Path.Combine(approot, ConfigurationManager.AppSettings["RootDirectory"].Replace("/", "\\"));
-			var folder = Path.Combine(root, path.Replace("/","\\"));
+			
+			var folder = Path.Combine(Config.RootDirectory, path.Replace("/","\\"));
 			var filesResponse = new FilesResponse();
 			filesResponse.Directory = GetFolderResult(folder);
 			return new HttpResponseMessage<FilesResponse>(filesResponse);

@@ -1,9 +1,7 @@
-﻿using System.Configuration;
-using System.IO;
-using System.Reflection;
+﻿using System.IO;
 using System.Web;
 using System.Web.Routing;
-using Microsoft.ApplicationServer.Http;
+using LightCore;
 using WebApi.RestFiles.Operations;
 
 namespace WebApi.RestFiles {
@@ -13,15 +11,21 @@ namespace WebApi.RestFiles {
 	public class MvcApplication : HttpApplication {
 		
 		protected void Application_Start() {
-			RouteTable.Routes.SetDefaultHttpConfiguration(new WebApiConfiguration());
-			RouteTable.Routes.MapServiceRoute<FilesApi>("files");
 
-			var assemblyPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-			var root = Path.Combine(assemblyPath, ConfigurationManager.AppSettings["RootDirectory"]);
-			if (!Directory.Exists(root)) {
-				Directory.CreateDirectory(root);
-				Directory.CreateDirectory(root + "test");
+			var appConfig = new AppConfig();
+			
+			if (!Directory.Exists(appConfig.RootDirectory)) {
+				Directory.CreateDirectory(appConfig.RootDirectory);
+				Directory.CreateDirectory(Path.Combine(appConfig.RootDirectory, "test"));
 			}
+
+			var builder = new ContainerBuilder();
+			builder.Register(appConfig);
+
+			var container = builder.Build();
+			
+			RouteTable.Routes.SetDefaultHttpConfiguration(new LightCoreConfiguration(container));
+			RouteTable.Routes.MapServiceRoute<FilesApi>("files");
 		}
 	}
 }

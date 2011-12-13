@@ -107,7 +107,9 @@
     <Content Include="img\Safari_logo.jpg" />
     <Content Include="img\txt.png" />
     <Content Include="js\ajaxfileupload.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />
