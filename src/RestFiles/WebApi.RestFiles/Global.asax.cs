@@ -27,7 +27,9 @@ namespace WebApi.RestFiles {
 																MaxReceivedMessageSize = 1024 * 1024,
 																TransferMode = TransferMode.Streamed
 			                                              	});
+
 			RouteTable.Routes.MapServiceRoute<FilesApi>("files");
+			RouteTable.Routes.MapServiceRoute<RevertFilesApi>("revertfiles");
 		}
 	}
 }

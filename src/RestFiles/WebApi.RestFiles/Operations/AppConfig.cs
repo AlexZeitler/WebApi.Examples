@@ -13,17 +13,25 @@ namespace WebApi.RestFiles.Operations {
 			this.TextFileExtensions = ConfigurationManager.AppSettings["TextFileExtensions"].Split(',');
 			this.ExcludeDirectories = ConfigurationManager.AppSettings["ExcludeDirectories"].Split(',');
 
-			if (!Directory.Exists(this.RootDirectory)) {
-				Directory.CreateDirectory(this.RootDirectory);
-				DirectoryInfo testDirectory =
-					Directory.CreateDirectory(Path.Combine(this.RootDirectory, "test"));
+			Initialize();
+		}
+
+		public void Initialize()
+		{
+			if (Directory.Exists(this.RootDirectory))
+			{
+				Directory.Delete(this.RootDirectory, true);
+			}
+
+			Directory.CreateDirectory(this.RootDirectory);
+			DirectoryInfo testDirectory =
+				Directory.CreateDirectory(Path.Combine(this.RootDirectory, "test"));
 
 
-
-				using (StreamWriter outfile =
-					new StreamWriter(Path.Combine(testDirectory.FullName, "readme.md"))) {
-					outfile.Write("Some markdown");
-				}
+			using (StreamWriter outfile =
+				new StreamWriter(Path.Combine(testDirectory.FullName, "readme.md")))
+			{
+				outfile.Write("Some markdown");
 			}
 		}
 
