@@ -14,12 +14,8 @@ namespace WebApi.RestFiles {
 
 			var appConfig = new AppConfig();
 			
-			if (!Directory.Exists(appConfig.RootDirectory)) {
-				Directory.CreateDirectory(appConfig.RootDirectory);
-				Directory.CreateDirectory(Path.Combine(appConfig.RootDirectory, "test"));
-			}
-
 			var builder = new ContainerBuilder();
+			
 			builder.Register(appConfig);
 
 			var container = builder.Build();

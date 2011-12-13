@@ -8,9 +8,23 @@ namespace WebApi.RestFiles.Operations {
 		public AppConfig() {
 			var approot = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 			var root = Path.Combine(approot, ConfigurationManager.AppSettings["RootDirectory"]);
+			
 			this.RootDirectory = root;
 			this.TextFileExtensions = ConfigurationManager.AppSettings["TextFileExtensions"].Split(',');
 			this.ExcludeDirectories = ConfigurationManager.AppSettings["ExcludeDirectories"].Split(',');
+
+			if (!Directory.Exists(this.RootDirectory)) {
+				Directory.CreateDirectory(this.RootDirectory);
+				DirectoryInfo testDirectory =
+					Directory.CreateDirectory(Path.Combine(this.RootDirectory, "test"));
+
+
+
+				using (StreamWriter outfile =
+					new StreamWriter(Path.Combine(testDirectory.FullName, "readme.md"))) {
+					outfile.Write("Some markdown");
+				}
+			}
 		}
 
 		public string RootDirectory { get; set; }

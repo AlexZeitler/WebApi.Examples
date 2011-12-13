@@ -22,11 +22,15 @@ namespace WebApi.RestFiles.Operations
 		[WebGet(UriTemplate = "{*Path}")]
 		public HttpResponseMessage<FilesResponse> Get(string path)
 		{
+			var targetPath = Path.Combine(Config.RootDirectory, path.Replace("/","\\"));
+
+			var isDirectory = Directory.Exists(targetPath);
+
+			var response = isDirectory
+				? new FilesResponse { Directory = GetFolderResult(targetPath) }
+				: new FilesResponse { File = GetFileResult(new FileInfo(targetPath)) };
 			
-			var folder = Path.Combine(Config.RootDirectory, path.Replace("/","\\"));
-			var filesResponse = new FilesResponse();
-			filesResponse.Directory = GetFolderResult(folder);
-			return new HttpResponseMessage<FilesResponse>(filesResponse);
+			return new HttpResponseMessage<FilesResponse>(response);
 		}
 
 		private FolderResult GetFolderResult(string targetPath) {
@@ -57,6 +61,19 @@ namespace WebApi.RestFiles.Operations
 			}
 
 			return result;
+		}
+
+		private FileResult GetFileResult(FileInfo fileInfo) {
+			var isTextFile = this.Config.TextFileExtensions.Contains(fileInfo.Extension);
+
+			return new FileResult {
+				Name = fileInfo.Name,
+				Extension = fileInfo.Extension,
+				FileSizeBytes = fileInfo.Length,
+				IsTextFile = isTextFile,
+				Contents = isTextFile ? System.IO.File.ReadAllText(fileInfo.FullName) : null,
+				ModifiedDate = fileInfo.LastWriteTimeUtc,
+			};
 		}
 	}
 }
