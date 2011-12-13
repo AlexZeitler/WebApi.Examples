@@ -1,6 +1,10 @@
+using System.Collections.Specialized;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.ServiceModel.Web;
+using System.Web;
 using WebApi.RestFiles.Types;
 using File = WebApi.RestFiles.Types.File;
 
@@ -19,11 +23,30 @@ namespace WebApi.RestFiles.Operations
 		}
 
 		[WebGet(UriTemplate = "{*Path}")]
-		public HttpResponseMessage<FilesResponse> Get(string path)
+		public HttpResponseMessage Get(string path, HttpRequestMessage request)
 		{
 			var targetPath = Path.Combine(Config.RootDirectory, path.Replace("/","\\"));
+			var forDownload = false;
+
+			var queryString = HttpUtility.ParseQueryString(request.RequestUri.Query.ToLower());
+			if(queryString.AllKeys.Contains("fordownload")) {
+				forDownload = bool.Parse(queryString["fordownload"]);
+			}
 
 			var isDirectory = Directory.Exists(targetPath);
+
+			if (!isDirectory && forDownload) {
+				var file = new FileStream(targetPath, FileMode.Open);
+				
+				var message = new HttpResponseMessage {
+					Content = new StreamContent(file),
+				};
+				
+				message.Content.Headers.ContentDisposition = 
+					new ContentDispositionHeaderValue("attachment");
+
+				return message;
+			}
 
 			var response = isDirectory
 				? new FilesResponse { Directory = GetFolderResult(targetPath) }
