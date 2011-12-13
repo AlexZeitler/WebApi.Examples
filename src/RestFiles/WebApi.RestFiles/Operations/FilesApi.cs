@@ -1,4 +1,3 @@
-using System.Configuration;
 using System.IO;
 using System.Net.Http;
 using System.ServiceModel.Web;
@@ -39,7 +38,7 @@ namespace WebApi.RestFiles.Operations
 			foreach (var dirPath in Directory.GetDirectories(targetPath)) {
 				var dirInfo = new DirectoryInfo(dirPath);
 
-				if (ConfigurationManager.AppSettings["ExcludeDirectories"].Contains(dirInfo.Name)) continue;
+				if (Config.ExcludeDirectories.Contains(dirInfo.Name)) continue;
 
 				result.Folders.Add(new Folder {
 					Name = dirInfo.Name,
@@ -56,7 +55,7 @@ namespace WebApi.RestFiles.Operations
 					Extension = fileInfo.Extension,
 					FileSizeBytes = fileInfo.Length,
 					ModifiedDate = fileInfo.LastWriteTimeUtc,
-					IsTextFile = ConfigurationManager.AppSettings["TextFileExtensions"].Contains(fileInfo.Extension),
+					IsTextFile = Config.TextFileExtensions.Contains(fileInfo.Extension),
 				});
 			}
 
