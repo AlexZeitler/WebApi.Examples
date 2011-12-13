@@ -20,7 +20,10 @@ namespace WebApi.RestFiles {
 
 			var container = builder.Build();
 			
-			RouteTable.Routes.SetDefaultHttpConfiguration(new LightCoreConfiguration(container));
+			RouteTable.Routes.SetDefaultHttpConfiguration(new LightCoreConfiguration(container)
+			                                              	{
+			                                              		EnableHelpPage = true
+			                                              	});
 			RouteTable.Routes.MapServiceRoute<FilesApi>("files");
 		}
 	}

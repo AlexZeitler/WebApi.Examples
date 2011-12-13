@@ -147,6 +147,7 @@
     <Content Include="img\Safari_logo.jpg" />
     <Content Include="img\txt.png" />
     <Content Include="js\ajaxfileupload.js" />
+    <Content Include="js\jquery-1.5.min.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

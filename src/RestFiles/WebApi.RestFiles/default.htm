@@ -9,26 +9,24 @@
 </head>
 <body>
 
-<a href="http://www.servicestack.net" style="display:block;position:absolute;top:5px;left:10px;"><img src="http://servicestack.net/icon-home.jpg" alt="ServiceStack Home" /></a>
-
 <div id="header">
 
     <div id="header-links">
-        <a href="../ServiceStack.Hello/">Hello World</a>
+        <!--<a href="../ServiceStack.Hello/">Hello World</a>
         <a href="../Backbone.Todos/">Todos</a>
-        <a href="../RedisStackOverflow/">Redis StackOverflow</a>
+        <a href="../RedisStackOverflow/">Redis StackOverflow</a>-->
         <a href="../RestFiles/">REST Files</a>
-        <a href="../ServiceStack.MovieRest/">REST Movies</a>
+        <!--<a href="../ServiceStack.MovieRest/">REST Movies</a>
         <a href="../ServiceStack.Northwind/">Northwind Database</a>
         <a href="../ServiceStack.Examples.Clients/">Ajax Client</a>
-        <a href="../ServiceStack.Examples.Clients/Soap12.aspx">Soap 1.2</a>
+        <a href="../ServiceStack.Examples.Clients/Soap12.aspx">Soap 1.2</a>-->
     </div>
 
-    <a id="github" href="https://github.com/ServiceStack/ServiceStack.Examples"><img src="img/btn-github.png" alt="ServiceStack.Examples project" /></a>
+    <a id="github" href="https://github.com/AlexZeitler/WebApi.Examples">WebApi.Examples on GitHub</a>
 </div>
 
 <div id="title">
-    <h1><a href="http://www.servicestack.net">ServiceStack</a><b>/</b><a class="active" href="./">The Rest Files</a></h1>
+    <h1><a href="http://wcf.codeplex.com">WCF Web API</a><b>/</b><a class="active" href="./">The Rest Files</a></h1>
 </div>
 
 <div id="info">
@@ -40,16 +38,16 @@
 
     <h3>
         GitHub-like browser with complete remote file management over REST in
-        <a href="https://github.com/ServiceStack/ServiceStack.Examples/blob/master/src/RestFiles/RestFiles/default.htm">1 page jQuery</a> +
-        <a href="https://github.com/ServiceStack/ServiceStack.Examples/blob/master/src/RestFiles/RestFiles.ServiceInterface/FilesService.cs">1 page C#</a>
+        <a href="https://github.com/AlexZeitler/WebApi.Examples/blob/master/src/RestFiles/WebApi.RestFiles/default.htm">1 page jQuery</a> +
+        <a href="https://github.com/AlexZeitler/WebApi.Examples/blob/master/src/RestFiles/WebApi.RestFiles/Operations/FilesApi.cs">1 page C#</a>
     </h3>
 
     <div id="doc">
-        <h4><a href="./metadata">The REST /files web service API:</a></h4>
+        <h4><a href="./files/help">The REST /files web service API:</a></h4>
         <dl>
-            <dt><b>GET</b> <a href="./files/dtos/Types">/path/to/folder</a></dt>
+            <dt><b>GET</b> <a href="./files/test">/path/to/folder</a></dt>
             <dd>Directory listing at server</dd>
-            <dt><b>GET</b> <a href="./files/README.md">/path/to/file.txt</a></dt>
+            <dt><b>GET</b> <a href="./files/test/README.md">/path/to/file.txt</a></dt>
             <dd>Info and contents of text file at path</dd>
             <dt><b>POST</b> /path/to/newfolder (no-body)</dt>
             <dd>Create a directory at newfolder path</dd>
@@ -76,10 +74,7 @@
 <div id="fileview"></div>
 
 <div id="footer">
-    <a id="logo" href="http://www.servicestack.net"><img src="img/logo-txt-small.png" alt="ServiceStack" /></a>
-    <a id="mono" href="http://www.mono-project.com"><img src="img/Mono-powered-big.png" /></a>
-    <div id="demo">Live demo hosted on Linux (Cent OS) / <a href="http://wiki.nginx.org">Nginx</a> using <a href="http://www.mono-project.com">Mono</a></div>
-    <div id="disclaimer">*Not affiliated with GitHub, which is a trademark of GitHub Inc.</div>
+    
 </div>
 
 <div class="bg">
