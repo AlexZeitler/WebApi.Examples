@@ -72,6 +72,7 @@ namespace WebApi.RestFiles.Operations
 
 			if (!Directory.Exists(targetDir.FullName)) {
 				Directory.CreateDirectory(targetDir.FullName);
+				return new HttpResponseMessage(HttpStatusCode.OK);
 			}
 
 			if (request.Content.IsMimeMultipartContent()) {
