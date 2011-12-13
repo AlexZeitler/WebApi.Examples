@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.ServiceModel.Web;
@@ -53,6 +55,19 @@ namespace WebApi.RestFiles.Operations
 				: new FilesResponse { File = GetFileResult(new FileInfo(targetPath)) };
 			
 			return new HttpResponseMessage<FilesResponse>(response);
+		}
+
+		[WebInvoke(Method = "POST", UriTemplate = "{*Path}")]
+		public HttpResponseMessage Post(string path, HttpRequestMessage request) {
+			var targetPath = Path.Combine(Config.RootDirectory, path.Replace("/", "\\"));
+
+			var targetDir = new FileInfo(targetPath);
+
+			if (!Directory.Exists(targetDir.FullName)) {
+				Directory.CreateDirectory(targetDir.FullName);
+			}
+
+			return new HttpResponseMessage(HttpStatusCode.OK);
 		}
 
 		private FolderResult GetFolderResult(string targetPath) {
