@@ -1,5 +1,5 @@
 using System;
-using System.Collections.Specialized;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -63,11 +63,37 @@ namespace WebApi.RestFiles.Operations
 
 			var targetDir = new FileInfo(targetPath);
 
+			var isExistingFile = targetDir.Exists
+			                     && (targetDir.Attributes & FileAttributes.Directory) != FileAttributes.Directory;
+
+			if (isExistingFile)
+				throw new NotSupportedException(
+					"POST only supports uploading new files. Use PUT to replace contents of an existing file");
+
 			if (!Directory.Exists(targetDir.FullName)) {
 				Directory.CreateDirectory(targetDir.FullName);
 			}
 
-			return new HttpResponseMessage(HttpStatusCode.OK);
+			if (request.Content.IsMimeMultipartContent()) {
+
+				MultipartFormDataStreamProvider streamProvider = new MultipartFormDataStreamProvider();
+
+				var task = request.Content.ReadAsMultipartAsync(streamProvider);
+				task.Wait();
+
+				IEnumerable<HttpContent> bodyparts = task.Result;
+
+				IDictionary<string, string> bodyPartFileNames = streamProvider.BodyPartFileNames;
+
+				foreach (var kv in bodyPartFileNames) {
+					var targetFilePath = Path.Combine(targetPath, Path.GetFileName(kv.Value));
+					System.IO.File.Copy(kv.Value, targetFilePath);
+					System.IO.File.Delete(kv.Value);
+				}
+
+				return new HttpResponseMessage(HttpStatusCode.OK);
+			}
+			return new HttpResponseMessage(HttpStatusCode.BadRequest); 
 		}
 
 		private FolderResult GetFolderResult(string targetPath) {

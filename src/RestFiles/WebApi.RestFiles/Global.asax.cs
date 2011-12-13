@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.ServiceModel;
 using System.Web;
 using System.Web.Routing;
 using LightCore;
@@ -22,7 +23,9 @@ namespace WebApi.RestFiles {
 			
 			RouteTable.Routes.SetDefaultHttpConfiguration(new LightCoreConfiguration(container)
 			                                              	{
-			                                              		EnableHelpPage = true
+			                                              		EnableHelpPage = true,
+																MaxReceivedMessageSize = 1024 * 1024,
+																TransferMode = TransferMode.Streamed
 			                                              	});
 			RouteTable.Routes.MapServiceRoute<FilesApi>("files");
 		}
